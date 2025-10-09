@@ -1,6 +1,5 @@
-// Vercel Serverless Function: /api/claim-metrics
-+ import pkg from "pg";
-+ const { Pool } = pkg;
+// Vercel Serverless Function: /api/claim-metrics  (CommonJS version)
+const { Pool } = require("pg");
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -49,7 +48,7 @@ function summarize(rows, meta, zip, y0, y1, level){
   };
 }
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   cors(res);
   if (req.method === "OPTIONS") return res.status(200).end();
 
@@ -158,7 +157,8 @@ export default async function handler(req, res) {
       client.release();
     }
   } catch (e) {
-    console.error(e);
-    res.status(500).json({ error: "server error" });
+    console.error("API ERROR:", e);
+    const debug = String(req.query.debug || "").toLowerCase() === "1";
+    res.status(500).json({ error: "server error", ...(debug ? { detail: String(e && e.message || e) } : {}) });
   }
-}
+};
