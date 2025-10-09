@@ -1,8 +1,5 @@
 {
   "name": "capital-claims-api",
   "version": "1.0.0",
-  "type": "module",
-  "dependencies": {
-    "pg": "8.11.5"
-  }
+  "dependencies": { "pg": "8.11.5" }
 }
